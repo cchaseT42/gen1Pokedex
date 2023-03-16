@@ -8,6 +8,23 @@ def add_prefix_for_prod(attr):
     else:
         return attr
 
+pokemon_moves = db.Table(
+    "pokemon_moves",
+    db.Column(
+        "pokemon_id",
+        db.Integer,
+        db.ForeignKey("pokemon.id"),
+        primary_key=True
+    ),
+    db.Column(
+        "moves_id",
+        db.Integer,
+        db.ForeignKey("moves.id"),
+        primary_key=True
+    )
+)
+
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -46,6 +63,11 @@ class Pokemon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     evolves = db.Column(db.Boolean, default=True)
+    moves = db.relationship(
+        "move",
+        secondary=pokemon_moves,
+        back_populates="pokemon"
+    )
 
 class Moves(db.Model):
     __tablename__ = "moves"
@@ -58,19 +80,8 @@ class Moves(db.Model):
     tm_number = db.Column(db.Integer)
     type = db.Column(db.String, nullable=False)
     pp = db.Column(db.Integer, nullable=False)
-
-pokemon_moves = db.Table(
-    "pokemon_moves",
-    db.Column(
-        "pokemon_id",
-        db.Integer,
-        db.ForeignKey("pokemon.id"),
-        primary_key=True
-    ),
-    db.Column(
-        "moves_id",
-        db.Integer,
-        db.ForeignKey("moves.id"),
-        primary_key=True
+    pokemon = db.relationship(
+        "pokemon",
+        secondary=pokemon_moves,
+        back_populates="moves"
     )
-)
