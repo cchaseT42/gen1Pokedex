@@ -2,6 +2,12 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
+def add_prefix_for_prod(attr):
+    if environment == "production":
+        return f"{SCHEMA}.{attr}"
+    else:
+        return attr
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -31,3 +37,12 @@ class User(db.Model, UserMixin):
             'username': self.username,
             'email': self.email
         }
+
+    class Pokemon(db.Model):
+        __tablename__ = 'pokemon'
+
+        if environment == "production":
+            __table_args__ = {'schema': SCHEMA}
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String, nullable=False)
+        evolves = db.Column(db.Boolean, default=True)
