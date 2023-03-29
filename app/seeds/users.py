@@ -1,4 +1,4 @@
-from app.models import db, User, environment, SCHEMA
+from app.models import db, User, Pokemon, environment, SCHEMA
 from sqlalchemy.sql import text
 
 
@@ -16,6 +16,30 @@ def seed_users():
     db.session.add(bobbie)
     db.session.commit()
 
+    pokemon1 = Pokemon(
+        id = 0o01, name="Bulbasaur", evolutions="Ivysaur, Venusaur", evo_level=16,
+        moves="Level 1 Tackle, Level 1 Growl, Level 7 Leech Seed, Level 13 Vine Whip, Level 20 Poison Powder, Level 27 Razor Leaf, Level 34 Growth, Level 41 Sleep Powder, Level 48 SolarBeam",
+        types="Grass/Poison",
+        locations="Starter Pokemon"
+    )
+
+    pokemon2 = Pokemon(
+        id=0o02, name="Ivysaur", evolutions="Venusaur", evo_level=32,
+        moves="Level 1 Tackle, Level 1 Growl, Level 7 Leech Seed, Level 13 Vine Whip, Level 22 Poison Powder, Level 30 Razor Leaf, Level 38 Growth, Level 46 Sleep Powder, Level 54 SolarBeam",
+        types="Grass/Poison",
+        locations="Evolve Bulbasaur"
+    )
+
+    pokemon3 = Pokemon(
+        id=0o03, name="Venusaur", moves="Level 1 Tackle, Level 1 Growl, Level 7 Leech Seed, Level 13 Vine Whip, Level 22 Poison Powder, Level 30 Razor Leaf, Level 48 Growth, Level 55 Sleep Powder, Level 65 SolarBeam",
+        types="Grass/Poison",
+        locations="Evolve Ivysaur"
+    )
+
+    db.session.add(pokemon1)
+    db.session.add(pokemon2)
+    db.session.add(pokemon3)
+    db.session.commit()
 
 # Uses a raw SQL query to TRUNCATE or DELETE the users table. SQLAlchemy doesn't
 # have a built in function to do this. With postgres in production TRUNCATE
@@ -28,5 +52,5 @@ def undo_users():
         db.session.execute(f"TRUNCATE table {SCHEMA}.users RESTART IDENTITY CASCADE;")
     else:
         db.session.execute(text("DELETE FROM users"))
-        
+
     db.session.commit()
