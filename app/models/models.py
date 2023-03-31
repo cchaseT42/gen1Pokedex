@@ -51,3 +51,14 @@ class Pokemon(db.Model):
     moves = db.Column(db.String, nullable=False)
     types = db.Column(db.String, nullable=False)
     locations = db.Column(db.String, nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'evolutions': self.evolutions,
+            'evo_level': self.evo_level,
+            'moves': self.moves,
+            'types': self.types,
+            'locations': self.locations
+        }
